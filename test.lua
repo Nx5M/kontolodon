@@ -160,17 +160,29 @@ local function MoveCarTo(targetCFrame)
 end
 
 -- // JUNKIE KEY EXPIRATION MATH //
-local expiryText = "Lifetime" -- Default text if the user has a lifetime key or no key
+local expiryText = "Lifetime" 
 
-if getgenv().JD_EXPIRES_AT then
-    local timeLeft = getgenv().JD_EXPIRES_AT - os.time()
+-- Catch the variable whether it is local, in the environment, or global
+local expireTime = nil
+if type(JD_EXPIRES_AT) ~= "nil" then
+    expireTime = JD_EXPIRES_AT
+elseif getgenv and getgenv().JD_EXPIRES_AT then
+    expireTime = getgenv().JD_EXPIRES_AT
+end
+
+-- Print to your Delta console so we can see what Junkie is doing
+print("--- JUNKIE SYSTEM CHECK ---")
+print("Raw Expiry Time:", expireTime)
+
+if expireTime then
+    local timeLeft = expireTime - os.time()
+    print("Seconds Remaining:", timeLeft)
     
     if timeLeft > 0 then
         local days = math.floor(timeLeft / 86400)
         local hours = math.floor((timeLeft % 86400) / 3600)
         local mins = math.floor((timeLeft % 3600) / 60)
         
-        -- Format the text dynamically based on how much time is left
         if days > 0 then
             expiryText = string.format("%d Days, %d Hrs", days, hours)
         elseif hours > 0 then
@@ -181,7 +193,12 @@ if getgenv().JD_EXPIRES_AT then
     else
         expiryText = "Expired"
     end
+else
+    print("ERROR: Junkie variable not found!")
 end
+
+print("Final UI Text:", expiryText)
+print("---------------------------")
 
 -- // INITIALIZE MILENIUM UI //
 local Window = library:window({
