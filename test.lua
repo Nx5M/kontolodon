@@ -164,7 +164,10 @@ local Window = library:window({
     name = "Drift 36", 
     suffix = "Auto Farm",
     game_info = "v1.2.1 • @itsRaindrop",
-    expire = expiryText, -- Passes our calculated Junkie time right into the UI
+    
+    -- CUSTOMIZE THIS TEXT HERE:
+    footer = "t.me/@itsRaindrop", 
+    
     size = UDim2.new(0, 550, 0, 350)
 })
 
