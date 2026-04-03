@@ -257,18 +257,21 @@ SettingsSec:button({
 -- // ANTI-AFK //
 for _, v in next, getconnections(LocalPlayer.Idled) do v:Disable() end
 
--- // MEMORY LEAK & ERROR SPAM FIX //
-task.spawn(function()
-    while scriptRunning do
-        if isAutoRaceEnabled then
-            local aChassis = PlayerGui:FindFirstChild("A-Chassis Interface")
-            if aChassis then
-                aChassis:Destroy() 
-            end
-        end
-        task.wait(0.5) 
+-- // MEMORY LEAK & ERROR SPAM FIX (INSTANT NUKE) //
+local function nukeChassis(child)
+    if child.Name == "A-Chassis Interface" then
+        task.defer(function()
+            child:Destroy()
+        end)
     end
-end)
+end
+
+-- Nuke existing one
+local existing = PlayerGui:FindFirstChild("A-Chassis Interface")
+if existing then existing:Destroy() end
+
+-- Nuke any new ones immediately
+PlayerGui.ChildAdded:Connect(nukeChassis)
 
 -- // MAIN AUTO FARM LOOP //
 task.spawn(function()
