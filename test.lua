@@ -163,7 +163,7 @@ end
 local Window = library:window({
     name = "Drift 36", 
     suffix = "Auto Farm",
-    game_info = "v1.2.1 • @itsRaindrop",
+    game_info = "v1.2.1 [BETA]",
     
     -- CUSTOMIZE THIS TEXT HERE:
     footer = "t.me/@itsRaindrop", 
